@@ -19,4 +19,4 @@ arg = (skipSome spaceChar *> stringLiteral) <?> "argument"
 stringLiteral :: Parsec Dec String String
 stringLiteral =
   between (string "\"") (string "\"") $
-  many (noneOf "\"" <|> (string "\\\"" *> pure '"'))
+  many ((string "\\\"" *> pure '"') <|> noneOf "\"")
