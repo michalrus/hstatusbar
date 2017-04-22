@@ -5,22 +5,16 @@ module Main
 import           Control.Concurrent      (forkIO)
 import           Control.Concurrent.Chan
 import           Control.Monad
-import qualified HStatusBar.Time
-import           HStatusBar.Types
-
-plainText :: String -> Module
-plainText = flip writeChan
-
-modules :: [Module]
-modules =
-  [ plainText "time is "
-  , HStatusBar.Time.local "%a %d %b %H:%M:%S %Z"
-  , plainText " • "
-  , HStatusBar.Time.universal "%H:%M %Z"
-  ]
+import           HStatusBar.ModuleParser
+import qualified System.Environment      as IO
 
 main :: IO ()
 main = do
+  args <- IO.getArgs
+  let modules =
+        case parseModules (unwords args) of
+          Left err -> error err
+          Right mods -> mods
   commonChan :: Chan (Int, String) <- newChan
   forM_ ([0 ..] `zip` modules) $ \(idx, mdl) -> do
     chan <- newChan

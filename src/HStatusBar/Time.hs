@@ -6,13 +6,14 @@ module HStatusBar.Time
 import           Control.Concurrent
 import           Control.Monad
 import           Data.Time
+import           HStatusBar.Decl
 import           HStatusBar.Types
 
-local :: String -> Module
-local = common getZonedTime
+local :: Decl
+local = common getZonedTime <$> (decl "time.local" *> arg)
 
-universal :: String -> Module
-universal = common getCurrentTime
+universal :: Decl
+universal = common getCurrentTime <$> (decl "time.universal" *> arg)
 
 -- TODO: make sure to sync µs to 0 every few minutes
 common

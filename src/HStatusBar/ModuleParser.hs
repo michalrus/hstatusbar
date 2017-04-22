@@ -3,25 +3,23 @@ module HStatusBar.ModuleParser
   ) where
 
 import           Control.Applicative
+import           Control.Concurrent.Chan (writeChan)
+import qualified Data.Bifunctor          as Bi
+import qualified HStatusBar.Time
+import           HStatusBar.Types
 import           Text.Megaparsec
-
---import HStatusBar.Types
-import qualified Data.Bifunctor      as Bi
-
-data Module
-  = MText String
-  | MFun String
-         [String]
-  deriving (Show, Eq)
 
 parseModules :: String -> Either String [Module]
 parseModules input = Bi.first parseErrorPretty $ parse parser "<argv>" input
 
 parser :: Parsec Dec String [Module]
-parser = many (ptext <|> pfun)
+parser = many (textP <|> funcP)
   where
-    ptext = MText <$> some (noneOf "$" <|> (string "$$" *> pure '$'))
-    pfun = char '$' *> between (string "(") (string ")") funs'
+    textP = plainText <$> some (noneOf "$" <|> (string "$$" *> pure '$'))
+    funcP = char '$' *> between (string "(") (string ")") (funs' <* space)
+
+plainText :: String -> Module
+plainText = flip writeChan
 
 funs' :: Parsec Dec String Module
 funs' =
@@ -30,21 +28,4 @@ funs' =
     _ -> error "No modules available." -- FIXME: use NEL?
 
 funs :: [Parsec Dec String Module]
-funs =
-  [ fun 1 "time.local"
-  , fun 1 "time.universal"
-  , fun 2 "bspwm"
-  , fun 3 "disk"
-  , fun 5 "memory"
-  ]
-
-fun :: Int -> String -> Parsec Dec String Module
-fun numArgs name =
-  MFun <$> string name <*>
-  count numArgs ((skipSome spaceChar *> stringLiteral) <?> "argument") <*
-  space
-
-stringLiteral :: Parsec Dec String String
-stringLiteral =
-  between (string "\"") (string "\"") $
-  many (noneOf "\"" <|> (string "\\\"" *> pure '"'))
+funs = [HStatusBar.Time.local, HStatusBar.Time.universal]
