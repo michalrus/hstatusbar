@@ -8,6 +8,7 @@ import qualified Data.Bifunctor          as Bi
 import qualified HStatusBar.Bspwm
 import qualified HStatusBar.Time
 import           HStatusBar.Types
+import           HStatusBar.Xtitle
 import           Text.Megaparsec
 
 parseModules :: String -> Either String [Module]
@@ -30,4 +31,8 @@ funs' =
 
 funs :: [Parsec Dec String Module]
 funs =
-  [HStatusBar.Time.local, HStatusBar.Time.universal, HStatusBar.Bspwm.bspwm]
+  [ HStatusBar.Time.local
+  , HStatusBar.Time.universal
+  , HStatusBar.Bspwm.bspwm
+  , HStatusBar.Xtitle.xtitle
+  ]
