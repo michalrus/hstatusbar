@@ -5,11 +5,14 @@ module Main
 import           Control.Concurrent      (forkIO)
 import           Control.Concurrent.Chan
 import           Control.Monad
+import qualified GHC.IO.Handle           as IO
+import qualified GHC.IO.Handle.FD        as IO
 import           HStatusBar.ModuleParser
 import qualified System.Environment      as IO
 
 main :: IO ()
 main = do
+  IO.hSetBuffering IO.stdout IO.LineBuffering
   args <- IO.getArgs
   let modules =
         case parseModules (unwords args) of

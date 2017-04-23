@@ -5,6 +5,7 @@ module HStatusBar.ModuleParser
 import           Control.Applicative
 import           Control.Concurrent.Chan (writeChan)
 import qualified Data.Bifunctor          as Bi
+import qualified HStatusBar.Bspwm
 import qualified HStatusBar.Time
 import           HStatusBar.Types
 import           Text.Megaparsec
@@ -28,4 +29,5 @@ funs' =
     _ -> error "No modules available." -- FIXME: use NEL?
 
 funs :: [Parsec Dec String Module]
-funs = [HStatusBar.Time.local, HStatusBar.Time.universal]
+funs =
+  [HStatusBar.Time.local, HStatusBar.Time.universal, HStatusBar.Bspwm.bspwm]
