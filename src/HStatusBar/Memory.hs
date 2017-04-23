@@ -8,7 +8,6 @@ import qualified Data.Map           as Map
 import           Data.Maybe         (catMaybes)
 import           HStatusBar.Decl
 import           HStatusBar.Types
-import           Numeric            (showFFloat)
 import           Text.Megaparsec
 
 memory :: Decl
@@ -34,7 +33,7 @@ memory_ chan =
         let mainUsed = memTotal - memFree - (cached + sReclaimable) - buffers
         let swapUsed = swapTotal - swapFree
         writeChan chan $
-          human (mainUsed * 1024) ++ " " ++ human (swapUsed * 1024)
+          humanSI 1 (mainUsed * 1024) ++ " " ++ humanSI 1 (swapUsed * 1024)
       _ -> pure ()
     threadDelay $ 2300 * 1000
 
@@ -46,18 +45,3 @@ parseMeminfo raw = Map.fromList $ catMaybes $ parseMaybe line <$> lines raw
       (,) <$> some (noneOf ":") <* char ':' <* space <*>
       (read <$> some digitChar) <*
       optional (space <* string "kB")
-
-human :: Integer -> String
-human num = loop units
-  where
-    loop (h:t) =
-      if num >= fst h
-        then showFFloat
-               (Just 1)
-               ((fromIntegral num / fromIntegral (fst h)) :: Double) $
-             snd h
-        else loop t
-    loop [] = show num ++ "B"
-    units =
-      reverse $
-      iterate (* 1024) (1024 :: Integer) `zip` ["K", "M", "G", "T", "P", "E"]

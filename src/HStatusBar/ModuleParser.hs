@@ -6,10 +6,11 @@ import           Control.Applicative
 import           Control.Concurrent.Chan (writeChan)
 import qualified Data.Bifunctor          as Bi
 import qualified HStatusBar.Bspwm
+import           HStatusBar.CPU
+import           HStatusBar.Disk
 import           HStatusBar.Memory
 import qualified HStatusBar.Time
 import           HStatusBar.Types
-import           HStatusBar.CPU
 import           HStatusBar.Xtitle
 import           Text.Megaparsec
 
@@ -39,4 +40,5 @@ funs =
   , HStatusBar.Xtitle.xtitle
   , HStatusBar.Memory.memory
   , HStatusBar.CPU.cpu
+  , HStatusBar.Disk.disk
   ]

@@ -37,5 +37,6 @@ If you want to take some other route, keep in mind that dependencies in the `.ca
 * `time.universal <fmt>`
 * `cpu <temp_path>` — temperature & load average.
 * `memory` — used RAM and swap.
+* `disk [<path0> …]` — available disk space for paths.
 * `xtitle <max_length>` — uses [xtitle](https://github.com/baskerville/xtitle) to get current window title.
 * `bspwm <normal_pre> <normal_post> <selected_pre> <selected_post> <urgent_pre> <urgent_post> [<icon0> …]` — uses [Bspwm](https://github.com/baskerville/bspwm)’s `bspc subscribe` to get the status of workspaces. (*Note: I’ve only ever used a single screen, so a simple PR might be needed to get this working sensibly on multiple screens.*)
