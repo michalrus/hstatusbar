@@ -6,6 +6,7 @@ import           Control.Applicative
 import           Control.Concurrent.Chan (writeChan)
 import qualified Data.Bifunctor          as Bi
 import qualified HStatusBar.Bspwm
+import           HStatusBar.Memory
 import qualified HStatusBar.Time
 import           HStatusBar.Types
 import           HStatusBar.Xtitle
@@ -35,4 +36,5 @@ funs =
   , HStatusBar.Time.universal
   , HStatusBar.Bspwm.bspwm
   , HStatusBar.Xtitle.xtitle
+  , HStatusBar.Memory.memory
   ]

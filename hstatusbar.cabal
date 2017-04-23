@@ -18,6 +18,7 @@ executable hstatusbar
   default-extensions:  LambdaCase
                      , ScopedTypeVariables
   build-depends:       base
+                     , containers
                      , megaparsec
                      , monad-loops
                      , time
