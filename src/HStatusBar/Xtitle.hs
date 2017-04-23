@@ -8,7 +8,15 @@ import           HStatusBar.Types
 import           System.Process     (proc)
 
 xtitle :: Decl
-xtitle = xtitle_ <$ decl "xtitle"
+xtitle = xtitle_ <$> (decl "xtitle" *> argInt)
 
-xtitle_ :: Module
-xtitle_ = processByLine (proc "xtitle" ["-s"]) $ flip writeChan
+xtitle_ :: Int -> Module
+xtitle_ maxLen =
+  processByLine (proc "xtitle" ["-s"]) $ \line ->
+    flip writeChan $ ellipsis maxLen line
+
+ellipsis :: Int -> String -> String
+ellipsis maxl s =
+  if length s > maxl
+    then take (maxl - 1) s ++ "…"
+    else s

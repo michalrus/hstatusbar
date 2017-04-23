@@ -2,6 +2,7 @@ module HStatusBar.Decl
   ( Decl
   , decl
   , arg
+  , argInt
   , processByLine
   ) where
 
@@ -20,12 +21,24 @@ decl :: String -> Parsec Dec String ()
 decl nme = string nme *> pure ()
 
 arg :: Parsec Dec String String
-arg = (skipSome spaceChar *> stringLiteral) <?> "argument"
+arg = arg' stringLiteral
+
+argInt :: Parsec Dec String Int
+argInt = arg' intLiteral
+
+arg' :: Parsec Dec String a -> Parsec Dec String a
+arg' literal = (skipSome spaceChar *> literal) <?> "argument"
 
 stringLiteral :: Parsec Dec String String
 stringLiteral =
-  between (string "\"") (string "\"") $
-  many ((string "\\\"" *> pure '"') <|> noneOf "\"")
+  between
+    (string "\"")
+    (string "\"")
+    (many ((string "\\\"" *> pure '"') <|> noneOf "\"")) <?>
+  "string literal"
+
+intLiteral :: Parsec Dec String Int
+intLiteral = (read <$> some digitChar) <?> "integer literal"
 
 processByLine :: CreateProcess -> (String -> Module) -> Module
 processByLine spec submodule chan =
