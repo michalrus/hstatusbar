@@ -9,6 +9,7 @@ import qualified HStatusBar.Bspwm
 import           HStatusBar.Memory
 import qualified HStatusBar.Time
 import           HStatusBar.Types
+import           HStatusBar.CPU
 import           HStatusBar.Xtitle
 import           Text.Megaparsec
 
@@ -37,4 +38,5 @@ funs =
   , HStatusBar.Bspwm.bspwm
   , HStatusBar.Xtitle.xtitle
   , HStatusBar.Memory.memory
+  , HStatusBar.CPU.cpu
   ]
