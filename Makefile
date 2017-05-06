@@ -4,11 +4,11 @@ local: autoformat       build lint
 ci:    autoformat-check build lint
 
 build:
-	@nix-build
+	@nix-build -j$$(nproc)
 lint:
 	@nix-shell --pure --run 'exec hlint .'
 autoformat:
-	@nix-shell --pure --run "exec $(MAKE) _autoformat"
+	@nix-shell --pure --run "exec $(MAKE) -j$$(nproc) _autoformat"
 autoformat-check: autoformat
 	@nix-shell --pure --run 'status=$$(git status --porcelain | grep -v "^M ") ; [ -z "$$status" ] || { printf >&2 "%s\n%s\n" "fatal: some files are unformatted (or repo unclean):" "$$status" ; exit 1 ; }'
 
