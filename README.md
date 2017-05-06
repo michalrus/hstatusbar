@@ -6,6 +6,8 @@
 
 If you don’t like Bash, here’s a more principled way to define input for [lemonbar](https://github.com/LemonBoy/bar) or similar.
 
+Also, it feels crisper. Modules that reflect some events, do that in “real-time,” with very little delay. Time is synced to ± 1.5 ms, etc.
+
 ## How to install
 
 The easiest way I know:
