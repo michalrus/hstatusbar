@@ -4,6 +4,7 @@ module HStatusBar.Disk
 
 import           Control.Concurrent
 import           Control.Monad        (forM, forever)
+import           HStatusBar.Common
 import           HStatusBar.Decl
 import           HStatusBar.Types
 import           System.Posix.StatVFS

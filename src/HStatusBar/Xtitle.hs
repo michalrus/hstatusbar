@@ -3,6 +3,7 @@ module HStatusBar.Xtitle
   ) where
 
 import           Control.Concurrent
+import           HStatusBar.Common
 import           HStatusBar.Decl
 import           HStatusBar.Types
 import           System.Process     (proc)

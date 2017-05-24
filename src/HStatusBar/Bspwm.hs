@@ -4,6 +4,7 @@ module HStatusBar.Bspwm
 
 import           Control.Concurrent
 import           Control.Monad      (join)
+import           HStatusBar.Common
 import           HStatusBar.Decl
 import           HStatusBar.Types
 import           System.Process     (proc)

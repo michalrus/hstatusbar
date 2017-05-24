@@ -6,6 +6,7 @@ import           Control.Concurrent
 import           Control.Monad      (forever)
 import qualified Data.Map           as Map
 import           Data.Maybe         (catMaybes)
+import           HStatusBar.Common
 import           HStatusBar.Decl
 import           HStatusBar.Types
 import           Text.Megaparsec
