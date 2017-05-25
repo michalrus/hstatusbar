@@ -1,4 +1,12 @@
-{ nixpkgs ? import <nixpkgs> { }, haskellPackages ? nixpkgs.haskellPackages }:
+{ nixpkgs ?
+    # Default for CI reproducibility, optionally override in your configuration.nix.
+    (import ((import <nixpkgs> {}).pkgs.fetchFromGitHub {
+      owner = "NixOS"; repo = "nixpkgs";
+      rev = "22da5d02466ffe465735986d705675982f3646a0";
+      sha256 = "1nmxiv72z832dhz6n8g0c0gsahvkvb27f7m6gxmcld03lh1v0kmb";
+    }) {})
+, haskellPackages ? nixpkgs.haskellPackages
+}:
 
 with nixpkgs;
 
