@@ -4,6 +4,7 @@ module HStatusBar.Bspwm
 
 import           Control.Concurrent
 import           Control.Monad      (join)
+import qualified Data.Map           as M
 import           HStatusBar.Common
 import           HStatusBar.Decl
 import           HStatusBar.Types
@@ -11,20 +12,11 @@ import           System.Process     (proc)
 import           Text.Megaparsec
 
 bspwm :: Decl
-bspwm =
-  bspwm_ <$> (decl "bspwm" *> arg) <*> arg <*> arg <*> arg <*> arg <*> arg <*>
-  many arg
+bspwm = bspwm_ <$> (decl "bspwm" *> arg) <*> arg <*> arg <*> many arg
 
 -- FIXME: this is terrible, String madness.
-bspwm_ :: String
-       -> String
-       -> String
-       -> String
-       -> String
-       -> String
-       -> [String]
-       -> Module
-bspwm_ normalPre normalPost selectedPre selectedPost urgentPre urgentPost icons =
+bspwm_ :: String -> String -> String -> [String] -> Module
+bspwm_ normalF selectedF urgentF icons =
   processByLine (proc "bspc" ["subscribe"]) $ \line ch ->
     case parseMaybe parseLine line of
       Just (BspLine _ wspaces _) ->
@@ -35,13 +27,13 @@ bspwm_ normalPre normalPost selectedPre selectedPost urgentPre urgentPost icons 
     showWspace :: (Workspace, String) -> String
     showWspace (wspace, icon) =
       case tpe . state $ wspace of
-        WUrgent -> urgentPre ++ nameIcon ++ urgentPost
+        WUrgent -> format urgentF
         _
-          | isSelected . state $ wspace ->
-            selectedPre ++ nameIcon ++ selectedPost
-        WOccupied -> normalPre ++ nameIcon ++ normalPost
-        _ -> ""
+          | isSelected . state $ wspace -> format selectedF
+        WOccupied -> format normalF
+        _ -> "" -- TODO: maybe add `unoccupiedF`?
       where
+        format = customFormat $ M.fromList [('i', nameIcon), ('n', name wspace)]
         nameIcon =
           if icon == ""
             then name wspace
