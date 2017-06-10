@@ -3,7 +3,6 @@ module HStatusBar.Time
   , universal
   ) where
 
-import           ClassyPrelude
 import           Data.Time
 import           HStatusBar.Decl
 import           HStatusBar.Types

@@ -4,12 +4,11 @@ module HStatusBar.Common
   , customFormat
   ) where
 
-import           ClassyPrelude
 import           Control.Monad.Loops (whileM_)
+import           Data.List           (iterate)
 import qualified Data.Map            as M
 import           HStatusBar.Types
 import           Numeric             (showFFloat)
-import           Prelude             (iterate)
 import           System.IO
 import           System.Process
 

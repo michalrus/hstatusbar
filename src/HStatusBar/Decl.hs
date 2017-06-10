@@ -5,9 +5,9 @@ module HStatusBar.Decl
   , argInt
   ) where
 
-import           ClassyPrelude
+-- FIXME: fromJust
+import           Data.Maybe       (fromJust)
 import           HStatusBar.Types
-import           Prelude          (read)
 import           Text.Megaparsec
 
 type Decl = Parsec Dec String Module
@@ -33,4 +33,4 @@ stringLiteral =
   "string literal"
 
 intLiteral :: Parsec Dec String Int
-intLiteral = (read <$> some digitChar) <?> "integer literal"
+intLiteral = (fromJust . readMay <$> some digitChar) <?> "integer literal"

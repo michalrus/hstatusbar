@@ -2,7 +2,6 @@ module Main
   ( main
   ) where
 
-import           ClassyPrelude
 import           Control.Concurrent      (forkIO)
 import qualified GHC.IO.Handle           as IO
 import qualified GHC.IO.Handle.FD        as IO

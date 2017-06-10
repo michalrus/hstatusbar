@@ -2,7 +2,6 @@ module HStatusBar.Xtitle
   ( xtitle
   ) where
 
-import           ClassyPrelude
 import           HStatusBar.Common
 import           HStatusBar.Decl
 import           HStatusBar.Types

@@ -15,11 +15,10 @@ executable hstatusbar
   hs-source-dirs:      src
   main-is:             Main.hs
   ghc-options:         -Wall -Werror -fwarn-incomplete-uni-patterns -threaded -rtsopts -with-rtsopts=-N
-  default-extensions:  NoImplicitPrelude
-                     , ScopedTypeVariables
+  default-extensions:  ScopedTypeVariables
                      , OverloadedStrings
                      , LambdaCase
-  build-depends:       base
+  build-depends:       base-noprelude
                      , classy-prelude
                      , safe
                      , containers

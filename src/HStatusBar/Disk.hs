@@ -2,7 +2,6 @@ module HStatusBar.Disk
   ( disk
   ) where
 
-import           ClassyPrelude
 import           Control.Monad        (forM, forever)
 import           HStatusBar.Common
 import           HStatusBar.Decl

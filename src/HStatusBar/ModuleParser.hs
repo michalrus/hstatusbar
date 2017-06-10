@@ -2,7 +2,6 @@ module HStatusBar.ModuleParser
   ( parseModules
   ) where
 
-import           ClassyPrelude      hiding (try)
 import qualified Data.Bifunctor     as Bi
 import qualified HStatusBar.Bspwm
 import qualified HStatusBar.CPU
@@ -11,7 +10,7 @@ import qualified HStatusBar.Memory
 import qualified HStatusBar.Time
 import           HStatusBar.Types
 import qualified HStatusBar.Xtitle
-import           Text.Megaparsec
+import           Text.Megaparsec    as MP
 
 parseModules :: String -> Either String [Module]
 parseModules input = Bi.first parseErrorPretty $ parse parser "<argv>" input
@@ -28,7 +27,7 @@ plainText = flip writeChan
 
 funs' :: Parsec Dec String Module
 funs' =
-  case try <$> funs of
+  case MP.try <$> funs of
     h:t -> foldl' (<|>) h t
     _ -> error "No modules available." -- FIXME: use NEL?
 

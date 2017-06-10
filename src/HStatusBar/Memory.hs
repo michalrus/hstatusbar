@@ -2,13 +2,14 @@ module HStatusBar.Memory
   ( memory
   ) where
 
-import           ClassyPrelude
 import           Control.Monad     (forever)
 import qualified Data.Map          as M
+
+-- FIXME: fromJust
+import           Data.Maybe        (fromJust)
 import           HStatusBar.Common
 import           HStatusBar.Decl
 import           HStatusBar.Types
-import           Prelude           (read)
 import           Text.Megaparsec
 
 memory :: Decl
@@ -44,5 +45,5 @@ parseMeminfo raw = M.fromList $ catMaybes $ parseMaybe line <$> lines raw
     line :: Parsec Dec String (String, Integer)
     line =
       (,) <$> some (noneOf (":" :: String)) <* char ':' <* space <*>
-      (read <$> some digitChar) <*
+      (fromJust . readMay <$> some digitChar) <*
       optional (space <* string "kB")
