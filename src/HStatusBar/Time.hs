@@ -3,8 +3,7 @@ module HStatusBar.Time
   , universal
   ) where
 
-import           Control.Concurrent
-import           Control.Monad
+import           ClassyPrelude
 import           Data.Time
 import           HStatusBar.Decl
 import           HStatusBar.Types

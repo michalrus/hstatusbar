@@ -2,13 +2,13 @@ module HStatusBar.Bspwm
   ( bspwm
   ) where
 
-import           Control.Concurrent
-import           Control.Monad      (join)
-import qualified Data.Map           as M
+import           ClassyPrelude     hiding (try)
+import           Control.Monad     (join)
+import qualified Data.Map          as M
 import           HStatusBar.Common
 import           HStatusBar.Decl
 import           HStatusBar.Types
-import           System.Process     (proc)
+import           System.Process    (proc)
 import           Text.Megaparsec
 
 bspwm :: Decl
@@ -60,10 +60,12 @@ data BspLine =
           [String]
 
 parseLine :: Parsec Dec String BspLine
-parseLine = BspLine <$> many (noneOf ":") <*> many (try wspace) <*> many rest
+parseLine =
+  BspLine <$> many (noneOf (":" :: String)) <*> many (try wspace) <*> many rest
   where
     wspace :: Parsec Dec String Workspace
-    wspace = Workspace <$> (char ':' *> wstate) <*> some (noneOf ":")
+    wspace =
+      Workspace <$> (char ':' *> wstate) <*> some (noneOf (":" :: String))
     wstate :: Parsec Dec String WState
     wstate =
       (char 'O' *> pure (WState WOccupied True)) <|>
@@ -73,4 +75,4 @@ parseLine = BspLine <$> many (noneOf ":") <*> many (try wspace) <*> many rest
       (char 'U' *> pure (WState WUrgent True)) <|>
       (char 'u' *> pure (WState WUrgent False))
     rest :: Parsec Dec String String
-    rest = char ':' *> many (noneOf ":")
+    rest = char ':' *> many (noneOf (":" :: String))

@@ -2,7 +2,7 @@ module HStatusBar.Disk
   ( disk
   ) where
 
-import           Control.Concurrent
+import           ClassyPrelude
 import           Control.Monad        (forM, forever)
 import           HStatusBar.Common
 import           HStatusBar.Decl

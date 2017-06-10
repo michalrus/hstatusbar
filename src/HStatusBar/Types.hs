@@ -2,6 +2,6 @@ module HStatusBar.Types
   ( Module
   ) where
 
-import           Control.Concurrent.Chan
+import           ClassyPrelude
 
 type Module = Chan String -> IO ()

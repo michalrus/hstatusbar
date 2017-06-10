@@ -2,16 +2,15 @@ module HStatusBar.ModuleParser
   ( parseModules
   ) where
 
-import           Control.Applicative
-import           Control.Concurrent.Chan (writeChan)
-import qualified Data.Bifunctor          as Bi
+import           ClassyPrelude      hiding (try)
+import qualified Data.Bifunctor     as Bi
 import qualified HStatusBar.Bspwm
-import           HStatusBar.CPU
-import           HStatusBar.Disk
-import           HStatusBar.Memory
+import qualified HStatusBar.CPU
+import qualified HStatusBar.Disk
+import qualified HStatusBar.Memory
 import qualified HStatusBar.Time
 import           HStatusBar.Types
-import           HStatusBar.Xtitle
+import qualified HStatusBar.Xtitle
 import           Text.Megaparsec
 
 parseModules :: String -> Either String [Module]
@@ -20,7 +19,8 @@ parseModules input = Bi.first parseErrorPretty $ parse parser "<argv>" input
 parser :: Parsec Dec String [Module]
 parser = many (textP <|> funcP)
   where
-    textP = plainText <$> some (noneOf "$" <|> (string "$$" *> pure '$'))
+    textP =
+      plainText <$> some (noneOf ("$" :: String) <|> (string "$$" *> pure '$'))
     funcP = char '$' *> between (string "(") (string ")") (funs' <* space)
 
 plainText :: String -> Module
@@ -29,7 +29,7 @@ plainText = flip writeChan
 funs' :: Parsec Dec String Module
 funs' =
   case try <$> funs of
-    h:t -> foldl (<|>) h t
+    h:t -> foldl' (<|>) h t
     _ -> error "No modules available." -- FIXME: use NEL?
 
 funs :: [Parsec Dec String Module]

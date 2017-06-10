@@ -2,9 +2,8 @@ module Main
   ( main
   ) where
 
+import           ClassyPrelude
 import           Control.Concurrent      (forkIO)
-import           Control.Concurrent.Chan
-import           Control.Monad
 import qualified GHC.IO.Handle           as IO
 import qualified GHC.IO.Handle.FD        as IO
 import           HStatusBar.ModuleParser
@@ -22,7 +21,8 @@ main = do
   forM_ ([0 ..] `zip` modules) $ \(idx, mdl) -> do
     chan <- newChan
     void $ forkIO $ mdl chan
-    forkIO $
+    void $
+      forkIO $
       forever $ do
         val <- readChan chan
         writeChan commonChan (idx, val)
@@ -30,12 +30,12 @@ main = do
       loop vals = do
         (idx, val) <- readChan commonChan
         let newVals = editNth vals idx val
-        when (newVals /= vals) $ putStrLn $ join newVals
+        when (newVals /= vals) $ putStrLn $ pack $ join newVals -- FIXME: Text
         loop newVals
   loop $ const "" <$> modules
 
 editNth :: [a] -> Int -> a -> [a]
 editNth xs n x =
-  if 0 <= n && n < Prelude.length xs
-    then Prelude.take n xs ++ [x] ++ Prelude.drop (n + 1) xs
+  if 0 <= n && n < length xs
+    then take n xs ++ [x] ++ drop (n + 1) xs
     else xs

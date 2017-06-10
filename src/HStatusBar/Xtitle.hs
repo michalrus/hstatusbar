@@ -2,11 +2,11 @@ module HStatusBar.Xtitle
   ( xtitle
   ) where
 
-import           Control.Concurrent
+import           ClassyPrelude
 import           HStatusBar.Common
 import           HStatusBar.Decl
 import           HStatusBar.Types
-import           System.Process     (proc)
+import           System.Process    (proc)
 
 xtitle :: Decl
 xtitle = xtitle_ <$> (decl "xtitle" *> argInt)

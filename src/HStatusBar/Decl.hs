@@ -5,8 +5,9 @@ module HStatusBar.Decl
   , argInt
   ) where
 
-import           Control.Applicative
+import           ClassyPrelude
 import           HStatusBar.Types
+import           Prelude          (read)
 import           Text.Megaparsec
 
 type Decl = Parsec Dec String Module
@@ -28,7 +29,7 @@ stringLiteral =
   between
     (string "\"")
     (string "\"")
-    (many ((string "\\\"" *> pure '"') <|> noneOf "\"")) <?>
+    (many ((string "\\\"" *> pure '"') <|> noneOf ("\"" :: String))) <?>
   "string literal"
 
 intLiteral :: Parsec Dec String Int
