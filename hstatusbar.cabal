@@ -20,7 +20,6 @@ executable hstatusbar
                      , LambdaCase
   build-depends:       base-noprelude
                      , classy-prelude
-                     , safe
                      , containers
                      , megaparsec
                      , monad-loops

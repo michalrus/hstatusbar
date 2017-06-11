@@ -2,8 +2,7 @@ module HStatusBar.Bspwm
   ( bspwm
   ) where
 
-import           Control.Monad     (join)
-import qualified Data.Map          as M
+import qualified Data.Map          as Map (fromList)
 import           HStatusBar.Common
 import           HStatusBar.Decl
 import           HStatusBar.Types
@@ -32,7 +31,8 @@ bspwm_ normalF selectedF urgentF icons =
         WOccupied -> format normalF
         _ -> "" -- TODO: maybe add `unoccupiedF`?
       where
-        format = customFormat $ M.fromList [('i', nameIcon), ('n', name wspace)]
+        format =
+          customFormat $ Map.fromList [('i', nameIcon), ('n', name wspace)]
         nameIcon =
           if icon == ""
             then name wspace

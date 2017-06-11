@@ -2,11 +2,7 @@ module HStatusBar.Memory
   ( memory
   ) where
 
-import           Control.Monad     (forever)
-import qualified Data.Map          as M
-
--- FIXME: fromJust
-import           Data.Maybe        (fromJust)
+import qualified Data.Map          as Map (fromList)
 import           HStatusBar.Common
 import           HStatusBar.Decl
 import           HStatusBar.Types
@@ -20,7 +16,7 @@ memory_ chan =
   forever $ do
     contents <- parseMeminfo . unpack <$> readFileUtf8 "/proc/meminfo" -- FIXME: Text
     case catMaybes $
-         flip M.lookup contents <$>
+         flip lookup contents <$>
          [ "MemTotal"
          , "MemFree"
          , "Cached"
@@ -39,11 +35,11 @@ memory_ chan =
       _ -> pure ()
     threadDelay $ 2300 * 1000
 
-parseMeminfo :: String -> M.Map String Integer
-parseMeminfo raw = M.fromList $ catMaybes $ parseMaybe line <$> lines raw
+parseMeminfo :: String -> Map String Integer
+parseMeminfo raw = Map.fromList $ catMaybes $ parseMaybe line <$> lines raw
   where
     line :: Parsec Dec String (String, Integer)
     line =
       (,) <$> some (noneOf (":" :: String)) <* char ':' <* space <*>
-      (fromJust . readMay <$> some digitChar) <*
+      (fromMaybe 0 . readMay <$> some digitChar) <*
       optional (space <* string "kB")

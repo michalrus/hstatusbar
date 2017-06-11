@@ -2,15 +2,14 @@ module HStatusBar.Disk
   ( disk
   ) where
 
-import           Control.Monad        (forM, forever)
 import           HStatusBar.Common
 import           HStatusBar.Decl
 import           HStatusBar.Types
 import           System.Posix.StatVFS
-import qualified Text.Megaparsec      as P
+import qualified Text.Megaparsec      as MP
 
 disk :: Decl
-disk = disk_ <$> (decl "disk" *> P.many arg)
+disk = disk_ <$> (decl "disk" *> MP.many arg)
 
 disk_ :: [FilePath] -> Module
 disk_ paths chan =

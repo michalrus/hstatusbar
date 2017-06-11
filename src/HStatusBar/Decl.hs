@@ -5,8 +5,6 @@ module HStatusBar.Decl
   , argInt
   ) where
 
--- FIXME: fromJust
-import           Data.Maybe       (fromJust)
 import           HStatusBar.Types
 import           Text.Megaparsec
 
@@ -33,4 +31,6 @@ stringLiteral =
   "string literal"
 
 intLiteral :: Parsec Dec String Int
-intLiteral = (fromJust . readMay <$> some digitChar) <?> "integer literal"
+intLiteral = (read <$> some digitChar) <?> "integer literal"
+  where
+    read = fromMaybe 0 . readMay -- 0 won’t happen

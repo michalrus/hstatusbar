@@ -6,7 +6,6 @@ module HStatusBar.Common
 
 import           Control.Monad.Loops (whileM_)
 import           Data.List           (iterate)
-import qualified Data.Map            as M
 import           HStatusBar.Types
 import           Numeric             (showFFloat)
 import           System.IO
@@ -39,8 +38,8 @@ humanSI decimals num = loop units
       reverse $
       iterate (* 1024) (1024 :: Integer) `zip` ["K", "M", "G", "T", "P", "E"]
 
-customFormat :: M.Map Char String -> String -> String
+customFormat :: Map Char String -> String -> String
 customFormat _ [] = []
 customFormat mapping ('%':c:fmt) =
-  M.findWithDefault ['%', c] c mapping ++ customFormat mapping fmt
+  findWithDefault ['%', c] c mapping ++ customFormat mapping fmt
 customFormat mapping (c:fmt) = c : customFormat mapping fmt
