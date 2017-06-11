@@ -19,7 +19,7 @@ executable hstatusbar
                      , OverloadedStrings
                      , LambdaCase
   build-depends:       base-noprelude
-                     , classy-prelude
+                     , prelude
                      , containers
                      , megaparsec
                      , monad-loops

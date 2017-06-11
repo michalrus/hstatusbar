@@ -12,15 +12,21 @@ with nixpkgs;
 
 let
 
+  haskellPackagesWithOverrides = haskellPackages.override {
+    overrides = self: super: {
+      prelude = self.callCabal2nix "prelude" ./prelude {};
+    };
+  };
+
   build = let # TODO: Consider using `cabal sdist`? https://git.io/vSo8l
     src = builtins.filterSource (path: type: # FIXME: How to re-use .gitignore? https://git.io/vSo80
          lib.all (i: toString i !=            path) [ ./.git ./dist ./result ]
       && lib.all (i:          i != baseNameOf path) [ ".stack-work" ])
       ./.;
-  in haskellPackages.callCabal2nix "hstatusbar" src {};
+  in haskellPackagesWithOverrides.callCabal2nix "hstatusbar" src {};
 
   env = lib.overrideDerivation build.env (oldAttrs: {
-    buildInputs = [ git ] ++ (with haskellPackages; [
+    buildInputs = [ git ] ++ (with haskellPackagesWithOverrides; [
       cabal-install hlint hindent stylish-haskell
     ]);
   });

@@ -1,0 +1,8 @@
+name:                prelude
+version:             0
+license:             Apache-2.0
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Prelude
+  build-depends:       base-noprelude, classy-prelude

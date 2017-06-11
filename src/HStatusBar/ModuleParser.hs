@@ -2,7 +2,7 @@ module HStatusBar.ModuleParser
   ( parseModules
   ) where
 
-import qualified Data.Bifunctor     as Bi
+import qualified Data.Bifunctor    as Bi
 import qualified HStatusBar.Bspwm
 import qualified HStatusBar.CPU
 import qualified HStatusBar.Disk
@@ -10,7 +10,7 @@ import qualified HStatusBar.Memory
 import qualified HStatusBar.Time
 import           HStatusBar.Types
 import qualified HStatusBar.Xtitle
-import           Text.Megaparsec    as MP
+import           Text.Megaparsec   as MP
 
 parseModules :: String -> Either String [Module]
 parseModules input = Bi.first parseErrorPretty $ parse parser "<argv>" input
