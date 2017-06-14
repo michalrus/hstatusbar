@@ -21,6 +21,7 @@ executable hstatusbar
   build-depends:       base-noprelude
                      , prelude
                      , containers
+                     , text
                      , megaparsec
                      , monad-loops
                      , time

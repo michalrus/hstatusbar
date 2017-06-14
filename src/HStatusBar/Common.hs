@@ -6,12 +6,13 @@ module HStatusBar.Common
 
 import           Control.Monad.Loops (whileM_)
 import           Data.List           (iterate)
+import           Data.Text.IO
 import           HStatusBar.Types
 import           Numeric             (showFFloat)
-import           System.IO
+import           System.IO           (hIsEOF)
 import           System.Process
 
-processByLine :: CreateProcess -> (String -> Module) -> Module
+processByLine :: CreateProcess -> (Text -> Module) -> Module
 processByLine spec submodule chan =
   forever $ do
     (Nothing, Just hOut, Nothing, hProc) <-
@@ -23,8 +24,8 @@ processByLine spec submodule chan =
     terminateProcess hProc
     threadDelay 1000000
 
-humanSI :: Int -> Integer -> String
-humanSI decimals num = loop units
+humanSI :: Int -> Integer -> Text
+humanSI decimals num = pack . loop $ units
   where
     loop (h:t) =
       if num >= fst h
@@ -38,8 +39,11 @@ humanSI decimals num = loop units
       reverse $
       iterate (* 1024) (1024 :: Integer) `zip` ["K", "M", "G", "T", "P", "E"]
 
-customFormat :: Map Char String -> String -> String
-customFormat _ [] = []
-customFormat mapping ('%':c:fmt) =
-  findWithDefault ['%', c] c mapping ++ customFormat mapping fmt
-customFormat mapping (c:fmt) = c : customFormat mapping fmt
+customFormat :: Map Char Text -> Text -> Text
+customFormat mapping fmt = pack $ go (unpack <$> mapping) (unpack fmt)
+  where
+    go :: Map Char String -> String -> String
+    go _ [] = []
+    go smapping ('%':c:sfmt) =
+      findWithDefault ['%', c] c smapping ++ go smapping sfmt
+    go smapping (c:sfmt) = c : go smapping sfmt

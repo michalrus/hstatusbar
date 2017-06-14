@@ -11,12 +11,12 @@ import qualified System.Environment      as IO
 main :: IO ()
 main = do
   IO.hSetBuffering IO.stdout IO.LineBuffering
-  args <- IO.getArgs
+  args <- (pack <$>) <$> IO.getArgs
   let modules =
         case parseModules (unwords args) of
           Left err -> error err
           Right mods -> mods
-  commonChan :: Chan (Int, String) <- newChan
+  commonChan :: Chan (Int, Text) <- newChan
   forM_ ([0 ..] `zip` modules) $ \(idx, mdl) -> do
     chan <- newChan
     void $ forkIO $ mdl chan
@@ -25,11 +25,11 @@ main = do
       forever $ do
         val <- readChan chan
         writeChan commonChan (idx, val)
-  let loop :: [String] -> IO ()
+  let loop :: [Text] -> IO ()
       loop vals = do
         (idx, val) <- readChan commonChan
         let newVals = editNth vals idx val
-        when (newVals /= vals) $ putStrLn $ pack $ join newVals -- FIXME: Text
+        when (newVals /= vals) $ putStrLn $ concat newVals
         loop newVals
   loop $ const "" <$> modules
 

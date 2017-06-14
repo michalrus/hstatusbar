@@ -9,7 +9,7 @@ import           System.Posix.StatVFS
 import qualified Text.Megaparsec      as MP
 
 disk :: Decl
-disk = disk_ <$> (decl "disk" *> MP.many arg)
+disk = disk_ <$> (decl "disk" *> ((unpack <$>) <$> MP.many arg))
 
 disk_ :: [FilePath] -> Module
 disk_ paths chan =
@@ -17,6 +17,7 @@ disk_ paths chan =
     stats <- forM paths statVFS
     let avail s =
           fromIntegral (statVFS_bsize s) * fromIntegral (statVFS_bavail s)
-    let addLabels as = (\(p, a) -> p ++ "=" ++ a) <$> paths `zip` as
+    let tpaths :: [Text] = pack <$> paths
+    let addLabels as = (\(p, a) -> p ++ "=" ++ a) <$> tpaths `zip` as
     writeChan chan $ unwords $ addLabels $ humanSI 0 . avail <$> stats
     threadDelay $ 10700 * 1000

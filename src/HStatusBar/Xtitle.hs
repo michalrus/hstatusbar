@@ -15,7 +15,7 @@ xtitle_ maxLen =
   processByLine (proc "xtitle" ["-s"]) $ \line ->
     flip writeChan $ ellipsis maxLen line
 
-ellipsis :: Int -> String -> String
+ellipsis :: Int -> Text -> Text
 ellipsis maxl s =
   if length s > maxl
     then take (maxl - 1) s ++ "…"
