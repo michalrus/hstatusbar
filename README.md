@@ -43,3 +43,7 @@ If you want to take some other route, keep in mind that dependencies in the `.ca
 * `battery <uevent_path> <icon_charging> <icon_full> <icon_discharging> <warn_capacity> <warn_fmt1> <warn_fmt2>` — when capacity falls below `<warn_capacity>`%, the status will start blinking, alternating between `<warn_fmt1>` and `<warn_fmt2>`, with `%s` in them being the displayed text status.
 * `xtitle <max_length>` — uses [xtitle](https://github.com/baskerville/xtitle) to get current window title.
 * `bspwm <normal_fmt> <selected_fmt> <urgent_fmt> [<icon0> …]` — uses [Bspwm](https://github.com/baskerville/bspwm)’s `bspc subscribe` to get the status of workspaces. (*Note: I’ve only ever used a single screen, so a PR might be needed to get this working sensibly on multiple screens.*)
+
+## To-do
+
+1. Use [Dhall](https://github.com/Gabriel439/Haskell-Dhall-Library) for configuration instead of the crappy format strings.
