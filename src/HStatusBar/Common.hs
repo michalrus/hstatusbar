@@ -2,10 +2,12 @@ module HStatusBar.Common
   ( processByLine
   , humanSI
   , customFormat
+  , blink
   ) where
 
 import           Control.Monad.Loops (whileM_)
 import           Data.List           (iterate)
+import qualified Data.Map            as M
 import           Data.Text.IO
 import           HStatusBar.Types
 import           Numeric             (showFFloat)
@@ -47,3 +49,9 @@ customFormat mapping fmt = pack $ go (unpack <$> mapping) (unpack fmt)
     go smapping ('%':c:sfmt) =
       findWithDefault ['%', c] c smapping ++ go smapping sfmt
     go smapping (c:sfmt) = c : go smapping sfmt
+
+blink :: (Text -> IO ()) -> [Text] -> Text -> IO ()
+blink display fmts text =
+  forM_ fmts $ \fmt -> do
+    display $ customFormat (M.fromList [('s', text)]) fmt
+    threadDelay $ 600 * 1000
