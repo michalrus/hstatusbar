@@ -3,6 +3,7 @@ module HStatusBar.ModuleParser
   ) where
 
 import qualified Data.Bifunctor       as Bi
+import qualified HStatusBar.Alsa
 import qualified HStatusBar.Battery
 import qualified HStatusBar.Bspwm
 import qualified HStatusBar.CPU
@@ -44,4 +45,5 @@ funs =
   , HStatusBar.CPU.cpu
   , HStatusBar.Disk.disk
   , HStatusBar.Battery.battery
+  , HStatusBar.Alsa.volume
   ]
